@@ -70,13 +70,14 @@ export async function listaItens(compraId: number): Promise<Array<{
     quantidade: number; 
     preco: number; 
     total: number; 
+    done: number;
 }>> 
 {
-  const SELECT = 
-    'SELECT itemid, nome, quantidade, preco, total\n ' + 
-    'FROM itens\n ' + 
-    `WHERE compraid = ${compraId}\n`
-    'ORDER BY rowid ASC;';
+  const SELECT = `
+    SELECT itemid, nome, quantidade, preco, total, done
+    FROM itens
+    WHERE compraid = ${compraId}
+    ORDER BY rowid ASC;`;
 
   let Rows: Array<{
     itemid: number; 
@@ -84,6 +85,7 @@ export async function listaItens(compraId: number): Promise<Array<{
     quantidade: number; 
     preco: number; 
     total: number; 
+    done: number;
   }> = [];
 
   const Db: SQLiteDatabase = await ConectaDB();
@@ -238,22 +240,39 @@ interface UpdateItem {
     nome: string;
     preco: number;
     quantidade: number;
+    done: number;
 };
 
-export async function atualizaItem({itemId, nome, preco, quantidade,}: UpdateItem): Promise<void> {
+export async function atualizaItem({itemId, nome, preco, quantidade, done}: UpdateItem): Promise<void> {
   const Db: SQLiteDatabase = await ConectaDB();
 
   //console.log('*** ', itemId, nome, preco, quantidade);
 
   await Db.runAsync(`
     UPDATE itens SET 
-    nome = ?, preco = ?, quantidade = ?
+      nome = ?, preco = ?, quantidade = ?, done = ?
     WHERE itemid = ?`,
-    [nome, preco, quantidade, itemId]
+    [nome, preco, quantidade, done, itemId]
   );  
 
   FechaDB(Db);
 };
+
+export async function atualizaItemDone(itemId: number, done: number): Promise<void> {
+  const Db: SQLiteDatabase = await ConectaDB();
+
+  console.log('*** ', itemId, done);
+
+  await Db.runAsync(`
+    UPDATE itens SET 
+      done = ?
+    WHERE itemid = ?`,
+    [done, itemId]
+  );  
+
+  FechaDB(Db);
+};
+
 
 export async function excluiItem(itemId: number) {
   const Db: SQLiteDatabase = await ConectaDB();

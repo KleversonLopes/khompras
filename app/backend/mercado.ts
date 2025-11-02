@@ -50,7 +50,8 @@ export async function CriaDB() {
           nome       TEXT           NOT NULL,
           quantidade NUMERIC (8, 2) NOT NULL DEFAULT (0),
           preco      NUMERIC (8, 2) DEFAULT (0) NOT NULL,
-          total      NUMERIC (8, 2) AS (preco * quantidade) 
+          total      NUMERIC (8, 2) AS (preco * quantidade),
+          done       INTEGER        DEFAULT (0) CHECK (0 OR 1) 
       );
     `);
 
@@ -152,34 +153,34 @@ export async function PopulaDados() {
      */
     await DB.execAsync(`
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "CAIXA DE LEITE", 3, 3.48);
+        (${Compra1.lastInsertRowId}, "CAIXA DE LEITE", 3, 3.48, 0);
 
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "ESPAGUETE", 1, 7.28);
+        (${Compra1.lastInsertRowId}, "ESPAGUETE", 1, 7.28, 0);
 
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "ARROZ DE 5 KG", 1, 22);
+        (${Compra1.lastInsertRowId}, "ARROZ DE 5 KG", 1, 22, 0);
 
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "FEIJÃO DE 1 KG", 1, 12);
+        (${Compra1.lastInsertRowId}, "FEIJÃO DE 1 KG", 1, 12, 0);
 
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "MEIO KG ALCATRA", 0.5, 52);
+        (${Compra1.lastInsertRowId}, "MEIO KG ALCATRA", 0.5, 52, 0);
 
       INSERT INTO itens
-        (compraid, nome, quantidade, preco)
+        (compraid, nome, quantidade, preco, done)
       values
-        (${Compra1.lastInsertRowId}, "PATINHO MOIDO 800 g", 0.8, 49);
+        (${Compra1.lastInsertRowId}, "PATINHO MOIDO 800 g", 0.8, 49, 0);
     `);
     
     /** MAIS UMA COMPRA MODELO */

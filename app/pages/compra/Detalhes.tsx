@@ -12,12 +12,14 @@ import styles from "@/app/styles/Styles";
 
 import {
   atualizaItem,
+  atualizaItemDone,
   excluiItem,
   incluiItem,
   leCompra,
   listaItens
 } from "@/app/backend/compras";
 
+import { Checkbox } from 'expo-checkbox';
 import { Stack, useLocalSearchParams } from "expo-router";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -41,6 +43,7 @@ export default function Compra() {
   const [ItemNome, setItemNome] = useState<string>('');
   const [ItemQuantidade, setItemQuantidade] = useState<number>(0);
   const [ItemPreco, setItemPreco] = useState<number>(0);
+  const [ItemDone, setItemDone] = useState<number>(0);
 
   const [Dados, setDados] = useState<Array<{
     itemid: number; 
@@ -48,6 +51,7 @@ export default function Compra() {
     quantidade: number; 
     preco: number; 
     total: number; 
+    done: number;
   }>>([]);
 
 
@@ -102,6 +106,7 @@ export default function Compra() {
         nome: ItemNome,
         preco: ItemPreco,
         quantidade: ItemQuantidade,
+        done: ItemDone,
       };
       await atualizaItem(Registro);
       setAcao('add');
@@ -110,10 +115,23 @@ export default function Compra() {
     setItemNome('');
     setItemQuantidade(0);
     setItemPreco(0);
+    setItemDone(0);
     setReload(Reload == false);
   };
 
-  const handleEditItem = (item: { itemid: React.SetStateAction<number>; nome: React.SetStateAction<string>; quantidade: React.SetStateAction<number>; preco: React.SetStateAction<number>; }) => {
+  const handleCheckItem = (itemId: number, itemDone: number) => {
+    console.log(`handleCheckItem - done : ${itemDone}`);
+    atualizaItemDone( itemId, itemDone);
+    setReload(Reload == false);
+  };
+
+  const handleEditItem = (item: { itemid: React.SetStateAction<number>; 
+                                  nome: React.SetStateAction<string>; 
+                                  quantidade: React.SetStateAction<number>; 
+                                  preco: React.SetStateAction<number>; 
+                                  done: React.SetStateAction<number>; 
+                                }
+) => {
     setAcao('edit');
     //console.log('Item : ', item)
     inputNomeItem.current?.focus();
@@ -121,6 +139,7 @@ export default function Compra() {
     setItemNome(item.nome);
     setItemQuantidade(item.quantidade);
     setItemPreco(item.preco);
+    setItemDone(item.done);
   };
 
 
@@ -148,7 +167,7 @@ export default function Compra() {
                 placeholder="0,00" 
                 editable={false}
                 textAlign="right"
-                defaultValue={CompraLimite ? CompraLimite.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
+                value={CompraLimite ? CompraLimite.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
               />
             </Col>
 
@@ -159,7 +178,7 @@ export default function Compra() {
                 placeholder="0,00" 
                 editable={false}
                 textAlign="right"
-                defaultValue={CompraGastos ? CompraGastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
+                value={CompraGastos ? CompraGastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
               />
             </Col>
 
@@ -172,7 +191,7 @@ export default function Compra() {
                 placeholder="0,00" 
                 editable={false}
                 textAlign="right"
-                defaultValue={CompraSaldo ? CompraSaldo.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
+                value={CompraSaldo ? CompraSaldo.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '0.00'}
               />
             </Col>
           </Row>
@@ -186,7 +205,7 @@ export default function Compra() {
                 style={[ styles.input, { width: '100%', textAlign: 'left' }]} 
                 placeholder={'Digite o nome do item'}
                 keyboardType="default"
-                defaultValue={ItemNome ? ItemNome : ''}
+                value={ItemNome ? ItemNome : ''}
                 onChangeText={(text) => {setItemNome(text)}}
               />
               <Row style={{ justifyContent: 'space-between'}}>
@@ -195,8 +214,8 @@ export default function Compra() {
                   <TextInput 
                     style={[{ width: '100%', textAlign: 'right' }, styles.input]} 
                     placeholder='0,00'
-                    keyboardType="numeric"
-                    defaultValue={ItemQuantidade ? ItemQuantidade.toLocaleString('pt-BR', {style: 'decimal', currency: 'BRL'}) : ''}
+                    keyboardType="decimal-pad"
+                    defaultValue={ItemQuantidade ? ItemQuantidade.toLocaleString('pt-BR', {style: 'decimal'}) : ''}
                     onChangeText={(text) => setItemQuantidade(parseLocalFloat(text)) }
                   />
                 </Col>
@@ -246,6 +265,14 @@ export default function Compra() {
               data={ Dados }
               renderItem={({ item }) => (
                 <Row style={{paddingHorizontal: 3, paddingVertical: 1, borderBottomWidth: 0.5, borderColor: 'silver'}}>
+                  <Checkbox
+                    value={item.done === 1}
+                    onValueChange={(value) => {
+                      //setItemDone(value? 1 : 0);
+                      handleCheckItem(item.itemid, value ? 1 : 0);
+                    }}
+                  />
+
                   <Pressable
                     style={{
                       backgroundColor: 'black', 
@@ -254,14 +281,14 @@ export default function Compra() {
                     }}
                     onPress={() => handleEditItem(item)}
                   >
-                    <Text style={{ width: 150, color: 'white'}}>{item.nome}</Text>
+                    <Text style={[styles.textSmall,{ width: 150, color: 'white'}]}>{item.nome}</Text>
                   </Pressable>
-                  <Text style={{ width: 50, textAlign: 'right' }}>{item.quantidade.toFixed(2)}</Text>
-                  <Text style={{ width: 50, textAlign: 'right' }}>{item.preco.toFixed(2)}</Text>
-                  <Text style={{ width: 60, textAlign: 'right' }}>{item.total.toFixed(2)}</Text>
+                  <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.quantidade.toFixed(2)}</Text>
+                  <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.preco.toFixed(2)}</Text>
+                  <Text style={[styles.textSmall,{ width: 60, textAlign: 'right' }]}>{item.total.toFixed(2)}</Text>
                   <Feather 
                     name="minus-circle" 
-                    size={20} 
+                    size={18} 
                     color="red" 
                     onPress={() => handleDeleteItem(item.itemid)}
                   />

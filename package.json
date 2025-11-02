@@ -18,6 +18,7 @@
     "@react-navigation/native": "^7.1.8",
     "date-fns": "^4.1.0",
     "expo": "54.0.21",
+    "expo-checkbox": "~5.0.7",
     "expo-constants": "~18.0.10",
     "expo-dev-client": "~6.0.16",
     "expo-font": "~14.0.9",
