@@ -2,6 +2,8 @@
  * KCL - 02/11/2025
  * acrescentado check box para indicar que o item está no carrinho
  * criado campo done na base de dados de itens
+ * 
+ * O nome do item está em um botão para editar o item para modificação dos dados
  */
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from "react";
@@ -125,7 +127,7 @@ export default function Compra() {
   };
 
   const handleCheckItem = (itemId: number, itemDone: number) => {
-    console.log(`handleCheckItem - done : ${itemDone}`);
+    //console.log(`handleCheckItem - done : ${itemDone}`);
     atualizaItemDone( itemId, itemDone);
     setReload(Reload == false);
   };

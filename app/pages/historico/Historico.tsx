@@ -142,12 +142,7 @@ export default function Historico() {
                   size={14}
                   color={'gray'}
                 />
-                <Text
-                  style={{
-                  }}
-                >
-                  {format(new Date(item.data_compra), `dd, MMMM yyyy - H:m:s`)}
-                </Text>
+                <Text>{format(new Date(item.data_compra), `dd, MMMM yyyy`)}</Text>
               </Row>
 
               <Row 

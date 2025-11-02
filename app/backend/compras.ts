@@ -261,7 +261,7 @@ export async function atualizaItem({itemId, nome, preco, quantidade, done}: Upda
 export async function atualizaItemDone(itemId: number, done: number): Promise<void> {
   const Db: SQLiteDatabase = await ConectaDB();
 
-  console.log('*** ', itemId, done);
+  //console.log('*** ', itemId, done);
 
   await Db.runAsync(`
     UPDATE itens SET 
