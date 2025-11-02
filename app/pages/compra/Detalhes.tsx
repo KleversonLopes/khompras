@@ -1,3 +1,8 @@
+/**
+ * KCL - 02/11/2025
+ * acrescentado check box para indicar que o item está no carrinho
+ * criado campo done na base de dados de itens
+ */
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from "react";
 import { FlatList, Keyboard, Pressable, Text, TextInput } from "react-native";
