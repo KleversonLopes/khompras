@@ -216,7 +216,7 @@ export default function Compra() {
                 onChangeText={(text) => {setItemNome(text)}}
               />
               <Row style={{ justifyContent: 'space-between'}}>
-                <Col style={{ width: '40%', padding: 0 }}>
+                <Col style={{ width: '33%', padding: 0 }}>
                   <Text>Quantidade:</Text>
                   <TextInput 
                     style={[{ width: '100%', textAlign: 'right' }, styles.input]} 
@@ -227,7 +227,7 @@ export default function Compra() {
                   />
                 </Col>
 
-                <Col style={{ width: '40%', padding: 0 }}>
+                <Col style={{ width: '33%', padding: 0 }}>
                   <Text>Preço:</Text>
                   <TextInput 
                     style={[{ width: '100%', textAlign: 'right' }, styles.input]} 
@@ -236,6 +236,11 @@ export default function Compra() {
                     defaultValue={ItemPreco ? ItemPreco.toLocaleString('pt-BR', {style: 'decimal', currency: 'BRL'}) : ''}
                     onChangeText={(text) => setItemPreco(parseLocalFloat(text)) }
                   />
+                </Col>
+
+                <Col style={{ width: '33%', padding: 0 }}>
+                  <Text>Categoria:</Text>
+                  <Text>DropList</Text>
                 </Col>
               </Row>
 
@@ -258,11 +263,11 @@ export default function Compra() {
           </Row>
 
           {/** header da lista de Itens */}
-          <Row style={{ backgroundColor: '#d1d5db', padding: 5}}>
-            <Text style={{width: 130}}>Item</Text>
-            <Text style={{width:  60}}>Qtde</Text>
-            <Text style={{width:  60}}>Preço</Text>
-            <Text style={{width:  60}}>Total</Text>
+          <Row style={{ backgroundColor: '#d1d5db', padding: 3}}>
+            <Text style={{width: 150, textAlign: 'center'}}>Item</Text>
+            <Text style={{width:  50, textAlign: 'right'}}>Qtde</Text>
+            <Text style={{width:  50, textAlign: 'right'}}>Preço</Text>
+            <Text style={{width:  55}}>Total</Text>
           </Row>
 
           {/** Lista de Itens */}
@@ -284,7 +289,7 @@ export default function Compra() {
                     style={{
                       backgroundColor: 'black', 
                       paddingHorizontal: 10, paddingVertical: 5,
-                      borderRadius: 10, elevation: 5
+                      borderRadius: 6, //elevation: 5
                     }}
                     onPress={() => handleEditItem(item)}
                   >

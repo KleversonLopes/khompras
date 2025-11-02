@@ -30,7 +30,8 @@ const Compra = () => {
         <MaterialCommunityIcons 
           name="cart-plus"
           size={42}
-          //color={'white'}
+          //color={'orange'}
+          //backgroundColor={'black'}
         />
         <Col style={{width: 170}}>
           <Text style={[styles.h2, { textAlign: 'center' }]}> Compra </Text>

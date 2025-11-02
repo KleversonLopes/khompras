@@ -91,8 +91,9 @@ const styles = () => {
     linkButton: {
       color: '#fff',
       padding: 10,
-      borderWidth: 0.5,
+      borderWidth: 1,
       borderRadius: 10,
+      //elevation: 1,
     },
     input: {
       height: 40,
