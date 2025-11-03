@@ -272,44 +272,47 @@ export default function Compra() {
 
           {/** Lista de Itens */}
           <Row style={{ flex: 1, alignItems: 'top'}}>
-            <FlatList
-              ref={ListaItens}
-              data={ Dados }
-              renderItem={({ item }) => (
-                <Row style={{paddingHorizontal: 3, paddingVertical: 1, borderBottomWidth: 0.5, borderColor: 'silver'}}>
-                  <Checkbox
-                    value={item.done === 1}
-                    onValueChange={(value) => {
-                      //setItemDone(value? 1 : 0);
-                      handleCheckItem(item.itemid, value ? 1 : 0);
-                    }}
-                  />
+            {Dados.length > 0 ?
+              <FlatList
+                ref={ListaItens}
+                data={ Dados }
+                renderItem={({ item }) => (
+                  <Row style={{paddingHorizontal: 3, paddingVertical: 1, borderBottomWidth: 0.5, borderColor: 'silver'}}>
+                    <Checkbox
+                      value={item.done === 1}
+                      onValueChange={(value) => {
+                        //setItemDone(value? 1 : 0);
+                        handleCheckItem(item.itemid, value ? 1 : 0);
+                      }}
+                    />
 
-                  <Pressable
-                    style={{
-                      backgroundColor: 'black', 
-                      paddingHorizontal: 10, paddingVertical: 5,
-                      borderRadius: 6, //elevation: 5
-                    }}
-                    onPress={() => handleEditItem(item)}
-                  >
-                    <Text style={[styles.textSmall,{ width: 150, color: 'white'}]}>{item.nome}</Text>
-                  </Pressable>
-                  <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.quantidade.toFixed(2)}</Text>
-                  <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.preco.toFixed(2)}</Text>
-                  <Text style={[styles.textSmall,{ width: 60, textAlign: 'right' }]}>{item.total.toFixed(2)}</Text>
-                  <Feather 
-                    name="minus-circle" 
-                    size={18} 
-                    color="red" 
-                    onPress={() => handleDeleteItem(item.itemid)}
-                  />
-                </Row>
-              )}
-              keyExtractor={item => item.itemid.toString()}
-              style={{ flex: 1 }}
-              //showsVerticalScrollIndicator={false}
-            />
+                    <Pressable
+                      style={{
+                        backgroundColor: 'black', 
+                        paddingHorizontal: 10, paddingVertical: 5,
+                        borderRadius: 6, //elevation: 5
+                      }}
+                      onPress={() => handleEditItem(item)}
+                    >
+                      <Text style={[styles.textSmall,{ width: 150, color: 'white'}]}>{item.nome}</Text>
+                    </Pressable>
+                    <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.quantidade.toFixed(2)}</Text>
+                    <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.preco.toFixed(2)}</Text>
+                    <Text style={[styles.textSmall,{ width: 60, textAlign: 'right' }]}>{item.total.toFixed(2)}</Text>
+                    <Feather 
+                      name="minus-circle" 
+                      size={18} 
+                      color="red" 
+                      onPress={() => handleDeleteItem(item.itemid)}
+                    />
+                  </Row>
+                )}
+                keyExtractor={item => item.itemid.toString()}
+                style={{ flex: 1 }}
+                //showsVerticalScrollIndicator={false}
+              />
+              : <Text style={styles.h1}>Não há itens nessa compra</Text>
+            }
           </Row>
         </Container>
 

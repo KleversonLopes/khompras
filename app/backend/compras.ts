@@ -4,7 +4,7 @@ import { ConectaDB, FechaDB } from './mercado';
 
 export default function VOID(){};
 
-export async function listaCompra(): Promise<Array<{ 
+export async function listaCompras(): Promise<Array<{ 
   compra: number; 
   descricao: string; 
   data_compra: string;

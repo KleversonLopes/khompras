@@ -1,4 +1,9 @@
-import { listaCompra } from "@/app/backend/compras";
+/**
+ * KCL - 03/11/2025
+ * Quando não há dados no histórico de copras ou lista de itens 
+ * o app passou a mostra uma mensagem para o usuário
+ */
+import { listaCompras } from "@/app/backend/compras";
 import Col from "@/app/components/Col/col";
 import Container from "@/app/components/Container/container";
 import Row from "@/app/components/Row/row";
@@ -10,7 +15,7 @@ import React from "react";
 import { FlatList, Text } from "react-native";
 
 export default function Historico() {
-  const [ListaCompras, setListaCompras] = React.useState<Array<{ 
+  const [HistoricoCompras, setHistoricoCompras] = React.useState<Array<{ 
     compra: number; 
     descricao: string; 
     data_compra: string; 
@@ -19,19 +24,16 @@ export default function Historico() {
     saldo: number; 
     itens: number;
   }>>([]);
-  
+    
   const [isLoading, setIsLoading] = React.useState(false);
-  
-  //console.log('Historico component rendered');
-
   const [TotalCompras, setTotalCompras] = React.useState(0);
   const [TotalValor, setTotalValor] = React.useState(0);
 
   async function CarregaHistorico() {
     setIsLoading(true);
     try {
-      const Rows = await listaCompra();
-      setListaCompras(Rows);
+      const Rows = await listaCompras();
+      setHistoricoCompras(Rows);
       let Conta = 0;
       let Soma = 0;
       for (const Row of Rows) {
@@ -92,75 +94,78 @@ export default function Historico() {
         </Link>
       </Row>
 
-      <FlatList
-        data={ListaCompras}
-        renderItem={({ item }) => (
-          <Link 
-            style={{
-              padding: 6
-            }}
-            href={{
-              pathname: "../compra/Compra",
-              params: { 
-                pCompraID: item.compra, 
-                pCompraNome: item.descricao 
-              },
-            }}
-          >
-            <Col 
-              style={{ 
-                borderWidth: 0.3, 
-                width: '100%', 
-                borderRadius: 10, 
-                alignItems: 'left',
-                padding: 5
+      { HistoricoCompras.length > 0 ?
+        <FlatList
+          data={HistoricoCompras}
+          renderItem={({ item }) => (
+            <Link 
+              style={{
+                padding: 6
+              }}
+              href={{
+                pathname: "../compra/Compra",
+                params: { 
+                  pCompraID: item.compra, 
+                  pCompraNome: item.descricao 
+                },
               }}
             >
-              <Row style={{ justifyContent: 'space-between'}}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {item.descricao}
-                </Text>
-                <Text 
-                  style={{
-                    padding: 6, 
-                    backgroundColor: 'silver',
-                    borderRadius: 10
-                  }}
-                >
-                  {item.itens + ' itens'}
-                </Text>
-              </Row>
-
-              <Row style={{justifyContent: 'flex-start'}}>
-                <Feather
-                  name="calendar"
-                  size={14}
-                  color={'gray'}
-                />
-                <Text>{format(new Date(item.data_compra), `dd, MMMM yyyy`)}</Text>
-              </Row>
-
-              <Row 
+              <Col 
                 style={{ 
-                  justifyContent: 'space-between', 
-                  borderTopWidth: 0.3
+                  borderWidth: 0.3, 
+                  width: '100%', 
+                  borderRadius: 10, 
+                  alignItems: 'left',
+                  padding: 5
                 }}
               >
-                <Text style={{ textAlign: 'right', }}>Gastos</Text>
-                <Text style={{ textAlign: 'right', }}>
-                  {item.gastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                </Text>
-              </Row>
-            </Col>
-          </Link>
-        )}
-        keyExtractor={item => item.compra.toString()}
-      />
+                <Row style={{ justifyContent: 'space-between'}}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {item.descricao}
+                  </Text>
+                  <Text 
+                    style={{
+                      padding: 6, 
+                      backgroundColor: 'silver',
+                      borderRadius: 10
+                    }}
+                  >
+                    {item.itens + ' itens'}
+                  </Text>
+                </Row>
+
+                <Row style={{justifyContent: 'flex-start'}}>
+                  <Feather
+                    name="calendar"
+                    size={14}
+                    color={'gray'}
+                  />
+                  <Text>{format(new Date(item.data_compra), `dd, MMMM yyyy`)}</Text>
+                </Row>
+
+                <Row 
+                  style={{ 
+                    justifyContent: 'space-between', 
+                    borderTopWidth: 0.3
+                  }}
+                >
+                  <Text style={{ textAlign: 'right', }}>Gastos</Text>
+                  <Text style={{ textAlign: 'right', }}>
+                    {item.gastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                  </Text>
+                </Row>
+              </Col>
+            </Link>
+          )}
+          keyExtractor={item => item.compra.toString()}
+        />
+        : <Text style={styles.h1}>Não há Histórico de Compras</Text>
+      }
 
     </Container>
   );
