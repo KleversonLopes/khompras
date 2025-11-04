@@ -77,7 +77,7 @@ const styles = () => {
       color: 'black',
     },
     textSmall: {
-      fontSize: 9.5,
+      fontSize: 10,
       //color: 'black',
     },
     link: {

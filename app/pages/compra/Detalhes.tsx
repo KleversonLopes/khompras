@@ -7,7 +7,7 @@
  */
 import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from "react";
-import { FlatList, Keyboard, Pressable, Text, TextInput } from "react-native";
+import { FlatList, Keyboard, Pressable, Text, TextInput, useWindowDimensions } from "react-native";
 
 import Col from "@/app/components/Col/col";
 import Container from "@/app/components/Container/container";
@@ -31,6 +31,8 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function Compra() {
+  const { width } = useWindowDimensions();
+
   var { pCompraID, pCompraNome } = useLocalSearchParams<{ pCompraID?: string, pCompraNome?: string }>();
   
   const [Opacity, setOpacity] = useState<number>(1);
@@ -216,7 +218,7 @@ export default function Compra() {
                 onChangeText={(text) => {setItemNome(text)}}
               />
               <Row style={{ justifyContent: 'space-between'}}>
-                <Col style={{ width: '33%', padding: 0 }}>
+                <Col style={{ width: '40%', padding: 0 }}>
                   <Text>Quantidade:</Text>
                   <TextInput 
                     style={[{ width: '100%', textAlign: 'right' }, styles.input]} 
@@ -227,7 +229,7 @@ export default function Compra() {
                   />
                 </Col>
 
-                <Col style={{ width: '33%', padding: 0 }}>
+                <Col style={{ width: '40%', padding: 0 }}>
                   <Text>Preço:</Text>
                   <TextInput 
                     style={[{ width: '100%', textAlign: 'right' }, styles.input]} 
@@ -237,11 +239,12 @@ export default function Compra() {
                     onChangeText={(text) => setItemPreco(parseLocalFloat(text)) }
                   />
                 </Col>
-
+                {/* TODO
                 <Col style={{ width: '33%', padding: 0 }}>
                   <Text>Categoria:</Text>
                   <Text>DropList</Text>
                 </Col>
+                */}
               </Row>
 
               <Pressable
@@ -264,42 +267,49 @@ export default function Compra() {
 
           {/** header da lista de Itens */}
           <Row style={{ backgroundColor: '#d1d5db', padding: 3}}>
-            <Text style={{width: 150, textAlign: 'center'}}>Item</Text>
-            <Text style={{width:  50, textAlign: 'right'}}>Qtde</Text>
-            <Text style={{width:  50, textAlign: 'right'}}>Preço</Text>
-            <Text style={{width:  55}}>Total</Text>
+            <Text style={{width: (width - 215), textAlign: 'center'}}>Item</Text>
+            <Text style={{width:  45, textAlign: 'right'}}>Qtde</Text>
+            <Text style={{width:  45, textAlign: 'right'}}>Preço</Text>
+            <Text style={{width:  45}}>Total</Text>
           </Row>
 
           {/** Lista de Itens */}
-          <Row style={{ flex: 1, alignItems: 'top'}}>
+          <Row style={{ flex: 1, alignItems: 'top', padding: 0}}>
             {Dados.length > 0 ?
               <FlatList
                 ref={ListaItens}
                 data={ Dados }
                 renderItem={({ item }) => (
-                  <Row style={{paddingHorizontal: 3, paddingVertical: 1, borderBottomWidth: 0.5, borderColor: 'silver'}}>
+                  <Row 
+                    style={{
+                      //justifyContent: 'flex-start', 
+                      //paddingHorizontal: 0, 
+                      paddingVertical: 1, 
+                      borderBottomWidth: 0.5, 
+                      borderColor: 'silver'
+                    }}
+                  >
                     <Checkbox
+                      style={{width: 16, height: 16}}
                       value={item.done === 1}
-                      onValueChange={(value) => {
-                        //setItemDone(value? 1 : 0);
-                        handleCheckItem(item.itemid, value ? 1 : 0);
-                      }}
+                      onValueChange={(value) => { handleCheckItem(item.itemid, value ? 1 : 0); }}
                     />
 
                     <Pressable
                       style={{
                         backgroundColor: 'black', 
-                        paddingHorizontal: 10, paddingVertical: 5,
+                        paddingHorizontal: 5, paddingVertical: 5,
                         borderRadius: 6, //elevation: 5
                       }}
                       onPress={() => handleEditItem(item)}
                     >
-                      <Text style={[styles.textSmall,{ width: 150, color: 'white'}]}>{item.nome}</Text>
+                      <Text style={[styles.textSmall,{ width: (width - 215), color: 'white'}]}>{item.nome}</Text>
                     </Pressable>
-                    <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.quantidade.toFixed(2)}</Text>
-                    <Text style={[styles.textSmall,{ width: 50, textAlign: 'right' }]}>{item.preco.toFixed(2)}</Text>
-                    <Text style={[styles.textSmall,{ width: 60, textAlign: 'right' }]}>{item.total.toFixed(2)}</Text>
+                    <Text style={[styles.textSmall,{ width: 45, textAlign: 'right' }]}>{item.quantidade}</Text>
+                    <Text style={[styles.textSmall,{ width: 45, textAlign: 'right' }]}>{item.preco.toFixed(2)}</Text>
+                    <Text style={[styles.textSmall,{ width: 45, textAlign: 'right' }]}>{item.total.toFixed(2)}</Text>
                     <Feather 
+                      style={{alignContent: 'flex-end'}}
                       name="minus-circle" 
                       size={18} 
                       color="red" 

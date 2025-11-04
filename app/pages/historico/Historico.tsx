@@ -33,13 +33,17 @@ export default function Historico() {
     setIsLoading(true);
     try {
       const Rows = await listaCompras();
-      setHistoricoCompras(Rows);
       let Conta = 0;
       let Soma = 0;
-      for (const Row of Rows) {
-        ++Conta;
-        Soma = (Soma + Row.gastos);
+      
+      if (Rows != null) {
+        setHistoricoCompras(Rows);
+        for (const Row of Rows) {
+          ++Conta;
+          Soma = (Soma + Row.gastos);
+        }
       }
+      
       setTotalCompras(Conta);
       setTotalValor(Soma);
     } catch (error) {
@@ -156,7 +160,7 @@ export default function Historico() {
                 >
                   <Text style={{ textAlign: 'right', }}>Gastos</Text>
                   <Text style={{ textAlign: 'right', }}>
-                    {item.gastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                    {item.gastos ? item.gastos.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}): 'R$ 0,00'}
                   </Text>
                 </Row>
               </Col>
